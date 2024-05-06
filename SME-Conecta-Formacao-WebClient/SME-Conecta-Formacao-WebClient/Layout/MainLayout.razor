@@ -1,0 +1,75 @@
+﻿ @inherits LayoutComponentBase
+
+<div class="bb-page">
+
+
+    <Sidebar @ref="sidebar"
+             Title="Conecta Formação"
+             ImageSrc="https://hom-conectaformacao.sme.prefeitura.sp.gov.br/assets/conecta-formacao-logo-33e9c56b.svg"
+             DataProvider="SidebarDataProvider" />
+
+    <main>
+        <div class="bb-top-row px-4 d-flex justify-content-between">
+            <Icon Name="IconName.List" role="button" @onclick="ToggleSidebar" />
+        </div>
+
+        <article class="content px-4">
+            <div class="py-2">@Body</div>
+        </article>
+    </main>
+
+</div>
+
+@code {
+    Sidebar sidebar;
+    IEnumerable<NavItem> navItems;
+
+    private async Task<SidebarDataProviderResult> SidebarDataProvider(SidebarDataProviderRequest request)
+    {
+        if (navItems is null)
+            navItems = GetNavItems();
+
+        return await Task.FromResult(request.ApplyTo(navItems));
+    }
+
+    private IEnumerable<NavItem> GetNavItems()
+    {
+        navItems = new List<NavItem>
+        {
+            new NavItem { Id = "1", IconName = IconName.Person, Text = "Meus dados"},
+            new NavItem { Id = "2", Href = "/meus-dados", Text = "Meus dados",ParentId="1", Class="px-3"},
+            new NavItem { Id = "3", IconName = IconName.PersonAdd, Text = "Cadastro" },
+            new NavItem { Id = "4", Href = "/area-promotora", Text = "Área Promotora",ParentId="3", Class="px-3"},
+            new NavItem { Id = "5", Href = "/proposta", Text = "Cadastro de Propostas", ParentId="3", Class="px-3"},
+            new NavItem { Id = "6", IconName = IconName.Award, Text = "Formações"},
+            new NavItem { Id = "7", Href = "/inscricao", Text = "Inscrições" , ParentId="6", Class="px-3"},
+
+        };
+        return navItems;
+    }
+    private void ToggleSidebar() => sidebar.ToggleSidebar();
+}
+<style>
+    :root {
+        --bb-sidebar-width: 280px;
+        --bb-sidebar-collapsed-width: 65px;
+        --bb-sidebar-background-color: #FF9A52;
+        --bb-sidebar-top-row-background-color: #FF9A52;
+        --bb-sidebar-top-row-border-color: #FF9A52;
+        --bb-sidebar-title-text-color: white;
+        --bb-sidebar-brand-icon-color: white;
+        --bb-sidebar-brand-image-width: 45px;
+        --bb-sidebar-brand-image-height: 45px;
+        --bb-sidebar-title-badge-text-color: rgb(255,255,255);
+        --bb-sidebar-title-badge-background-color: rgba(25,135,84,var(--bs-bg-opacity,1));
+        --bb-sidebar-navbar-toggler-icon-color: white;
+        --bb-sidebar-navbar-toggler-background-color: white;
+        --bb-sidebar-content-border-color: rgb(194,192,192);
+        --bb-sidebar-nav-item-text-color: white;
+        --bb-sidebar-nav-item-text-active-color-rgb: 0,0,0;
+        --bb-sidebar-nav-item-text-hover-color: white;
+        --bb-sidebar-nav-item-text-active-color: white;
+        --bb-sidebar-nav-item-background-hover-color: #FF9A52;
+        --bb-sidebar-nav-item-group-background-color: #FF9A52;
+    }
+</style>
